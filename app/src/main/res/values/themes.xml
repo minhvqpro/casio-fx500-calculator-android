@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <style name="Theme.CasioCalculator" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/casio_dark</item>
+        <item name="colorPrimaryVariant">@color/casio_body</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/casio_dark</item>
+        <item name="android:navigationBarColor">@color/casio_dark</item>
+    </style>
+
+    <!-- Number Button Style -->
+    <style name="CalcButtonNumber" parent="Widget.Material3.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:backgroundTint">@color/button_number</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="cornerRadius">4dp</item>
+    </style>
+
+    <!-- Operator Button Style -->
+    <style name="CalcButtonOperator" parent="Widget.Material3.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:backgroundTint">@color/button_operator</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="cornerRadius">4dp</item>
+    </style>
+
+    <!-- Function Button Style -->
+    <style name="CalcButtonFunction" parent="Widget.Material3.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:backgroundTint">@color/button_function</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="cornerRadius">4dp</item>
+    </style>
+
+    <!-- Memory Button Style -->
+    <style name="CalcButtonMemory" parent="Widget.Material3.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:backgroundTint">@color/button_memory</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="cornerRadius">4dp</item>
+    </style>
+
+    <!-- Clear Button Style -->
+    <style name="CalcButtonClear" parent="Widget.Material3.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:backgroundTint">@color/button_clear</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="cornerRadius">4dp</item>
+    </style>
+
+    <!-- Equals Button Style -->
+    <style name="CalcButtonEquals" parent="Widget.Material3.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:backgroundTint">@color/button_equals</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">24sp</item>
+        <item name="cornerRadius">4dp</item>
+    </style>
+
+    <!-- Empty Button Style -->
+    <style name="CalcButtonEmpty" parent="Widget.Material3.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:backgroundTint">@color/casio_body</item>
+        <item name="cornerRadius">4dp</item>
+    </style>
+
+</resources>
