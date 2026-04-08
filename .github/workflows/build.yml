@@ -25,40 +25,54 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
     
-    - name: Install Gradle
-      run: |
-        wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip
-        unzip -q gradle-8.5-bin.zip
-        export PATH=$PWD/gradle-8.5/bin:$PATH
-        gradle --version
+    - name: Fix permissions
+      run: chmod +x gradlew
     
-    - name: Build Debug APK with Gradle
+    - name: Build Debug APK
       run: |
         export ANDROID_HOME=$ANDROID_SDK_ROOT
-        export PATH=$PWD/gradle-8.5/bin:$PATH
-        gradle clean assembleDebug --no-daemon --stacktrace
-      timeout-minutes: 20
+        ./gradlew clean assembleDebug --no-daemon
     
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
-      if: success()
       with:
         name: casio-fx500-debug-apk
         path: app/build/outputs/apk/debug/*.apk
-        if-no-files-found: error
+        retention-days: 30
     
     - name: Build Release APK
       run: |
         export ANDROID_HOME=$ANDROID_SDK_ROOT
-        export PATH=$PWD/gradle-8.5/bin:$PATH
-        gradle assembleRelease --no-daemon
-      timeout-minutes: 20
-      continue-on-error: true
+        ./gradlew assembleRelease --no-daemon
     
     - name: Upload Release APK
       uses: actions/upload-artifact@v4
-      if: success()
       with:
         name: casio-fx500-release-apk
         path: app/build/outputs/apk/release/*.apk
-        if-no-files-found: warn
+        retention-days: 30
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      with:
+        tag_name: v${{ github.run_number }}
+        name: Casio FX-500 Calculator v${{ github.run_number }}
+        body: |
+          ## Casio FX-500 Calculator
+          
+          ### Features:
+          - Basic arithmetic operations (+, -, ×, ÷)
+          - Square root (√) and percentage (%)
+          - Memory functions (MRC, M+, M-)
+          - Sign toggle (+/-)
+          - Clear (C) and All Clear (AC)
+          
+          ### Download:
+          - Debug APK: `app-debug.apk`
+          - Release APK: `app-release-unsigned.apk`
+        files: |
+          app/build/outputs/apk/debug/*.apk
+          app/build/outputs/apk/release/*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
