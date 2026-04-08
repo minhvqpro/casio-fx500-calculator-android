@@ -25,21 +25,19 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
     
-    - name: Fix permissions
-      run: chmod +x gradlew
+    - name: Install Gradle
+      run: |
+        wget -q https://services.gradle.org/distributions/gradle-8.5-bin.zip
+        unzip -q gradle-8.5-bin.zip
+        export PATH=$PWD/gradle-8.5/bin:$PATH
+        gradle --version
     
-    - name: Build Debug APK
+    - name: Build Debug APK with Gradle
       run: |
         export ANDROID_HOME=$ANDROID_SDK_ROOT
-        ./gradlew clean assembleDebug --no-daemon --info 2>&1 | tee build.log
+        export PATH=$PWD/gradle-8.5/bin:$PATH
+        gradle clean assembleDebug --no-daemon --stacktrace
       timeout-minutes: 20
-    
-    - name: Upload build log
-      uses: actions/upload-artifact@v4
-      if: failure()
-      with:
-        name: build-log
-        path: build.log
     
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
@@ -47,3 +45,20 @@ jobs:
       with:
         name: casio-fx500-debug-apk
         path: app/build/outputs/apk/debug/*.apk
+        if-no-files-found: error
+    
+    - name: Build Release APK
+      run: |
+        export ANDROID_HOME=$ANDROID_SDK_ROOT
+        export PATH=$PWD/gradle-8.5/bin:$PATH
+        gradle assembleRelease --no-daemon
+      timeout-minutes: 20
+      continue-on-error: true
+    
+    - name: Upload Release APK
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: casio-fx500-release-apk
+        path: app/build/outputs/apk/release/*.apk
+        if-no-files-found: warn
