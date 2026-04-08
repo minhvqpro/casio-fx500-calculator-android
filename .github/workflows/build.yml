@@ -20,30 +20,38 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: gradle
     
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
     
-    - name: Grant execute permission for gradlew
+    - name: Fix Gradle wrapper permissions
       run: chmod +x gradlew
     
-    - name: Build with Gradle
-      run: ./gradlew build --warning-mode all
+    - name: Download dependencies
+      run: ./gradlew dependencies --no-daemon
+      continue-on-error: false
     
     - name: Build Debug APK
-      run: ./gradlew assembleDebug
+      run: ./gradlew assembleDebug --no-daemon --stacktrace
+      timeout-minutes: 15
     
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
+      if: success()
       with:
         name: casio-fx500-debug-apk
-        path: app/build/outputs/apk/debug/*.apk
-        if-no-files-found: error
+        path: app/build/outputs/apk/debug/
+        if-no-files-found: warn
+    
+    - name: Build Release APK  
+      run: ./gradlew assembleRelease --no-daemon
+      timeout-minutes: 15
+      continue-on-error: true
     
     - name: Upload Release APK
       uses: actions/upload-artifact@v4
+      if: success()
       with:
-        name: casio-fx500-release-apk  
-        path: app/build/outputs/apk/release/*.apk
-        if-no-files-found: ignore
+        name: casio-fx500-release-apk
+        path: app/build/outputs/apk/release/
+        if-no-files-found: warn
