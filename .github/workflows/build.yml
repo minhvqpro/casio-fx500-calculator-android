@@ -7,9 +7,6 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,59 +24,26 @@ jobs:
     
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
-      with:
-        api-level: 34
-        build-tools: 34.0.0
     
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     
-    - name: Validate Gradle wrapper
-      uses: gradle/wrapper-validation-action@v1
+    - name: Build with Gradle
+      run: ./gradlew build --warning-mode all
     
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --stacktrace
-      env:
-        ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
-    
-    - name: Build Release APK
-      run: ./gradlew assembleRelease --stacktrace
-      env:
-        ANDROID_HOME: ${{ env.ANDROID_SDK_ROOT }}
+      run: ./gradlew assembleDebug
     
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
         name: casio-fx500-debug-apk
         path: app/build/outputs/apk/debug/*.apk
+        if-no-files-found: error
     
     - name: Upload Release APK
       uses: actions/upload-artifact@v4
       with:
-        name: casio-fx500-release-apk
+        name: casio-fx500-release-apk  
         path: app/build/outputs/apk/release/*.apk
-    
-    - name: Create Release
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          app/build/outputs/apk/debug/*.apk
-          app/build/outputs/apk/release/*.apk
-        tag_name: v${{ github.run_number }}
-        name: Release v${{ github.run_number }}
-        body: |
-          ## Casio FX-500 Calculator v${{ github.run_number }}
-          
-          ### Features:
-          - Basic arithmetic operations (+, -, ×, ÷)
-          - Square root (√) and percentage (%)
-          - Memory functions (MRC, M+, M-)
-          - Sign toggle (+/-)
-          - Clear (C) and All Clear (AC)
-          
-          ### Downloads:
-          - Debug APK: `app-debug.apk`
-          - Release APK: `app-release-unsigned.apk`
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if-no-files-found: ignore
